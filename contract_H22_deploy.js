@@ -8,6 +8,7 @@ const {
     ContractCreateTransaction,
     Hbar,
     FileAppendTransaction,
+    ContractFunctionParameters,
 } = require("@hashgraph/sdk");
 const fs = require("fs");
 const fspr = require("node:fs/promises")
@@ -16,6 +17,15 @@ const fspr = require("node:fs/promises")
 const operatorId = AccountId.fromString(process.env.VALIDATOR_ID);          // deploy from validator account
 const operatorKey = PrivateKey.fromString(process.env.VALIDATOR_PVKEY);     // deploy from validator account
 const client = Client.forTestnet().setOperator(operatorId, operatorKey);    // deploy from validator account
+console.log(`Contract will be deployed from ${operatorId}\n` );
+
+// Configure token and treasury
+require("dotenv").config({ path: `.env.h22.token`});
+const tokenId = AccountId.fromString(process.env.TOKEN_ID);
+const treasuryId = AccountId.fromString(process.env.TREASURY_ID);
+console.log(`Use token id: ${tokenId} (solidity format ${tokenId.toSolidityAddress()})` );
+console.log(`Use treasury id: ${treasuryId} (solidity format ${treasuryId.toSolidityAddress()})\n`)
+
 
 async function main() {
 
@@ -52,7 +62,12 @@ async function main() {
     const contractInstantiateTx = new ContractCreateTransaction()
         .setBytecodeFileId(bytecodeFileId)
         .setAdminKey(operatorKey)
-        .setGas(1000000);
+        .setGas(1000000)
+        .setConstructorParameters(
+            new ContractFunctionParameters()
+                .addAddress(tokenId.toSolidityAddress())
+                .addAddress(treasuryId.toSolidityAddress())
+        );
     const contractInstantiateSubmit = await contractInstantiateTx.execute(client);
     const contractInstantiateRx = await contractInstantiateSubmit.getReceipt(client);
     const contractId = contractInstantiateRx.contractId;

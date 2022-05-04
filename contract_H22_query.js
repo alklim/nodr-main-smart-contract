@@ -19,7 +19,8 @@ const treasuryId = AccountId.fromString(process.env.TREASURY_ID);
 const treasuryKey = PrivateKey.fromString(process.env.TREASURY_PVKEY);
 
 // Configure token
-const tokenId = process.env.TOKEN_ID;
+require("dotenv").config({ path: `.env.h22.token`});
+const tokenId = AccountId.fromString(process.env.TOKEN_ID);
 console.log(`Use token id : ${tokenId}`);
 
 // Configure contract id
@@ -28,7 +29,7 @@ const contractId = process.env.CONTRACT_ID;
 console.log(`Use contract id : ${contractId}\n`);
 
 // Configure token receiver account
-require("dotenv").config({ path: `./credentials/nodr01.env`});
+require("dotenv").config({ path: `./credentials/nodr04.env`});
 const receiverId = AccountId.fromString(process.env.ACCOUNT_ID);
 const receiverKey = PrivateKey.fromString(process.env.NODR_PVKEY);
 console.log(`Receiver id: ${receiverId}`);
@@ -90,7 +91,7 @@ async function main() {
     async function tokenAssociation(_accId, _tokenId, _accPvKey) {
         let associateAccTx = await new TokenAssociateTransaction()
             .setAccountId(_accId)
-            .setTokenIds([_tokenId])
+            .setTokenIds([_tokenId.toString()])
             .freezeWith(client)
             .sign(_accPvKey);
         let associateAccTxSubmit = await associateAccTx.execute(client);
@@ -108,8 +109,8 @@ async function main() {
     console.log(`Finish waiting for ${timeout} msec, continue \n`);
 
     cf = "trafficCommit";
-    let value =  1001;
-    res = await bCheckerFcn(receiverId, tokenId);
+    let value = 2*524288;
+    res = await bCheckerFcn(receiverId, tokenId.toString());
     console.log(`- Account ${receiverId} balance for token ${tokenId} is: ${res}`);
     if (res === undefined) await tokenAssociation(receiverId, tokenId, receiverKey);
     res = await writeContract(cf, receiverId, value);

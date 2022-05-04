@@ -17,7 +17,7 @@ console.log(`- Operator ID: ${operatorId}\n`);
 
 async function main() {
 
-    const tokenId = '0.0.34235442'
+    const tokenId = '0.0.34248664'
     // Delete fungible token
     // Create the transaction and freeze the unsigned transaction for manual signing
     const transaction = await new TokenDeleteTransaction()

@@ -5,9 +5,9 @@ const {
     PrivateKey,
     Client,
     TokenCreateTransaction,
-    TokenInfoQuery,
-    TokenUpdateTransaction,
+    TokenInfoQuery
 } = require("@hashgraph/sdk");
+const fspr = require("node:fs/promises");
 
 // Configure accounts and client
 const operatorId = AccountId.fromString(process.env.VALIDATOR_ID);
@@ -36,6 +36,13 @@ async function main() {
     const tokenAddressSol = tokenId.toSolidityAddress();
     console.log(`- Created token ID: ${tokenId}\n`);
     console.log(`- Created token ID Solidity format: ${tokenAddressSol}\n`);
+
+    try {
+        const data = new Uint8Array(Buffer.from(`## Updated on each token creation\nTOKEN_ID = ${tokenId}\nTREASURY_ID = ${treasuryId}\n`));
+        await fspr.writeFile('.env.h22.token', data);
+    } catch (err) {
+        console.error(err);
+    }
 
     // Token query
     const tokenInfo1 = await tQueryInfo(tokenId);

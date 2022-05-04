@@ -29,10 +29,10 @@ contract h22_nodr_contract is HederaTokenService {
     uint256 treasuryVolume;         // imitate working with NDR treasury TODO: need to mint new NDR on start of each epoch
     uint256 rewarded;               // total rewarded NDR in a variable  TODO: need to transfer NDR reward to nodr address
 
-    constructor () public {
+    constructor (address _tokenAddress, address _treasuryAddress) public {
         owner = msg.sender;
-        tokenAddress = address(0x20A97D8);
-        treasuryAddress = address(0x20A639D);
+        tokenAddress = _tokenAddress;
+        treasuryAddress = _treasuryAddress;
         k = 19;
         epochFrom = 20;
         epochTo = 61;
@@ -106,6 +106,7 @@ contract h22_nodr_contract is HederaTokenService {
                                                 // TODO: create code for mint new NDR tokens to treasury
         treasuryVolume += fraction*_mintAmount; // Here we need to mint new tokens using
                                                 // mintToken(token, amount, metadata) from HederaTokenService.sol
+        _tokenMint(mintFactor*fraction);
     }
 
     // Token transfer function that sends token amount from treasury to nodr account
@@ -113,6 +114,14 @@ contract h22_nodr_contract is HederaTokenService {
         int response = HederaTokenService.transferToken(_tokenId, _sender, _receiver, _amount);
         if (response != HederaResponseCodes.SUCCESS) {
             revert ("Transfer Failed");
+        }
+    }
+
+    // Token mint function that generates new tokens, calls on each epoch change
+    function _tokenMint(uint64 _amount) internal {
+        (int response, uint64 newTotalSupply, int64[] memory serialNumbers) = HederaTokenService.mintToken(tokenAddress, _amount, new bytes[](0));
+        if (response != HederaResponseCodes.SUCCESS) {
+            revert ("Mint Failed");
         }
     }
 }
