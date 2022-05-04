@@ -1,0 +1,22 @@
+node_modules
+credentials
+hip-206
+migrations
+build
+test
+package-lock.json
+minting_formula.js
+xxhash_sample.js
+account_creation.js
+H22_token_assosiate_and_move.js
+contract_delete.js
+contract_deploy.js
+transfer_check.js
+truffle-config.js
+
+# local env files
+.env*
+
+# Editor directories and files
+.idea
+.vscode
