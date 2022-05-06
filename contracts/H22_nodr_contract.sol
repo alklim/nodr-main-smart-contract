@@ -54,7 +54,6 @@ contract h22_nodr_contract is HederaTokenService {
     function trafficCommit(address _receiver ,uint256 _amount) public returns (bool) {
         require(msg.sender == owner);
         require(_amount > 0 && _amount < 2**32);
-
         if (currentTotalTraffic + _amount < (1<<k)) {
             // if adding _amount to traffic sum WILL NOT reach target than we add it to trafficSum and reward _amount
             (bool success) = _reward(_receiver, _amount, false);        // Only if reward is successful we call _trafficAdd
@@ -80,7 +79,7 @@ contract h22_nodr_contract is HederaTokenService {
 
     // internal function that rewards nodr account with NDR tokens depending on traffic amount and current epoch
     function _reward (address _receiver, uint256 _amount, bool _epochChg) internal returns (bool) {
-        bool result;
+        bool result = false;
         if (k >= epochFrom && k <= epochTo) {
             uint256 reward = _epochChg ? treasuryVolume : _amount*fraction*mintFactor/(1<<(k-1));
             int64 value = int64(uint64(reward));
@@ -100,11 +99,14 @@ contract h22_nodr_contract is HederaTokenService {
 
     // Token transfer function that sends token amount from treasury to nodr account
     function _tokenTransfer(address _tokenId, address _sender, address _receiver, int64 _amount) internal returns (bool) {
+        bool result = false;
         int response = HederaTokenService.transferToken(_tokenId, _sender, _receiver, _amount);
         if (response != HederaResponseCodes.SUCCESS) {
             revert ("Transfer Failed");
+        } else {
+            result = true;
         }
-        return true;
+        return result;
     }
 
     // Token mint function that generates new tokens, calls on each epoch change
