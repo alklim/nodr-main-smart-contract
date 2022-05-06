@@ -1,6 +1,6 @@
 {
   "name": "hedera-test-01",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "the first hedera smartcontract test",
   "main": "contract_H22_deploy.js",
   "dependencies": {
