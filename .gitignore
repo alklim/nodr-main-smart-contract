@@ -3,7 +3,6 @@ credentials
 hip-206
 migrations
 build
-test
 contracts/LookupContract.sol
 contracts/Migrations.sol
 package-lock.json
