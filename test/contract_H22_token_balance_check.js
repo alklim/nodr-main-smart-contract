@@ -28,7 +28,7 @@ const contractId = process.env.CONTRACT_ID;
 //console.log(`Use contract id : ${contractId}`);
 
 // Configure token receiver account
-require("dotenv").config({ path: `./credentials/nodr06.env`});
+require("dotenv").config({ path: `./credentials/nodr02.env`});
 const receiverId = AccountId.fromString(process.env.ACCOUNT_ID);
 const receiverKey = PrivateKey.fromString(process.env.NODR_PVKEY);
 //console.log(`Receiver id: ${receiverId}`);
