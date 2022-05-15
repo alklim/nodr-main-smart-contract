@@ -35,6 +35,7 @@ async function main() {
     const tokenUpdateTx = await new TokenUpdateTransaction()
         .setTokenId(tokenId.toString())
         .setAdminKey(treasuryKey)
+        .setTokenSymbol('NDR')
         .setSupplyKey(contractId)
         .freezeWith(client)
         .sign(treasuryKey);
