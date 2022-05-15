@@ -14,6 +14,7 @@ contract_delete.js
 contract_deploy.js
 transfer_check.js
 truffle-config.js
+contract_H22_token_delete.js
 
 # local env files
 .env*
