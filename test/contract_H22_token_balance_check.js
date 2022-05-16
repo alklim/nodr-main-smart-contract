@@ -2,9 +2,6 @@ const {
     AccountId,
     PrivateKey,
     Client,
-    ContractExecuteTransaction,
-    ContractFunctionParameters,
-    Hbar,
     AccountBalanceQuery,
     TokenAssociateTransaction,
 } = require("@hashgraph/sdk");
@@ -53,9 +50,18 @@ async function main() {
         console.log(`- Token association with account ${_accId} for token ${_tokenId} status: ${associateAccRx.status}`);
     }
 
-    let res = await bCheckerFcn(receiverId, tokenId.toString());
-    console.log(`- Account ${receiverId} balance for token ${tokenId} is: ${res/10e9}`);
-    if (res === undefined) await tokenAssociation(receiverId, tokenId, receiverKey);
+    let accounts = ["0.0.34227422",
+                    "0.0.34227438",
+                    "0.0.34227494",
+                    "0.0.34227523"];
+
+    for (let i=0; i < accounts.length; i++) {
+        let res = await bCheckerFcn(AccountId.fromString(accounts[i]), tokenId.toString());
+        console.log(`- Account ${receiverId} balance for token ${tokenId} is: ${res/10e9}`);
+        if (res === undefined) await tokenAssociation(receiverId, tokenId, receiverKey);
+    }
+
+
 }
 main();
 

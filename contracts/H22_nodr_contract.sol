@@ -52,8 +52,8 @@ contract h22_nodr_contract is HederaTokenService {
     }
 
     function trafficCommit(address _receiver, uint256 _amount) public returns (bool) {
-        //require(msg.sender == owner);
-        //require(_amount > 0 && _amount < 2**32);
+        require(msg.sender == owner);
+        require(_amount > 0 && _amount < 2**32);
         if (currentTotalTraffic + _amount < (1<<k)) {
             // if adding _amount to traffic sum WILL NOT reach target than we add it to trafficSum and reward _amount
             (bool success) = _reward(_receiver, _amount, false);        // Only if reward is successful we call _trafficAdd

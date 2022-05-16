@@ -15,13 +15,13 @@ const operatorId = AccountId.fromString(process.env.VALIDATOR_ID);
 const operatorKey = PrivateKey.fromString(process.env.VALIDATOR_PVKEY);
 const client = Client.forTestnet().setOperator(operatorId, operatorKey);
 console.log(`Use operator id : ${operatorId}`);
-console.log(`Use operator key : ${operatorKey}\n`);
+//console.log(`Use operator key : ${operatorKey}\n`);
 
 // Configure treasury
 const treasuryId = AccountId.fromString(process.env.TREASURY_ID);
 const treasuryKey = PrivateKey.fromString(process.env.TREASURY_PVKEY);
 console.log(`Use treasury id : ${treasuryId}`);
-console.log(`Use treasury key : ${treasuryKey}\n`);
+//console.log(`Use treasury key : ${treasuryKey}\n`);
 
 // Configure token
 require("dotenv").config({ path: `.env.h22.token`});
@@ -37,14 +37,14 @@ console.log(`Use contract id : ${contractId}\n`);
 require("dotenv").config({ path: `./credentials/nodr01.env`});
 const receiverId = AccountId.fromString(process.env.ACCOUNT_ID);
 const receiverKey = PrivateKey.fromString(process.env.NODR_PVKEY);
-console.log(`Receiver id: ${receiverId}`);
-console.log(`Receiver id in solidity format: ${receiverId.toSolidityAddress()}`);
-console.log(`Receiver private key: ${receiverKey}\n`);
+//console.log(`Receiver id: ${receiverId}`);
+//console.log(`Receiver id in solidity format: ${receiverId.toSolidityAddress()}`);
+//console.log(`Receiver private key: ${receiverKey}\n`);
 
 async function main() {
 
     async function readContract(_callFunction) {
-        console.log(`- ContractExecuteTransaction for contract ${contractId}, call function ${_callFunction}\n`);
+        console.log(`- ContractExecuteTransaction for contract ${contractId}, call function ${_callFunction}`);
         const readTx1 = new ContractExecuteTransaction()
             .setContractId(contractId)
             .setGas(100000)
@@ -52,7 +52,7 @@ async function main() {
             .setMaxTransactionFee(new Hbar(0.75));
         const readTxSubmit1 = await readTx1.execute(client);
         const readTxResult1 = await readTxSubmit1.getRecord(client);
-        console.log(`- Contract execute status : ${readTxResult1.receipt.status}\n`);
+        console.log(`- Contract execute status : ${readTxResult1.receipt.status}`);
 
         // finding how many 32-byte words tuple contains
         const len = readTxResult1.contractFunctionResult.bytes.length / (256 / 8);
@@ -74,7 +74,7 @@ async function main() {
 
     // If write to the contract will lead to token transfer from treasury, then Tx MUST be signed by the treasury key!
     async function writeContract(_callFunction, _param1, _param2) {
-        console.log(`- ContractExecuteTransaction for contract ${contractId}, call function ${_callFunction}\n`);
+        console.log(`- ContractExecuteTransaction for contract ${contractId}, call function ${_callFunction}`);
         const writeTx = new ContractExecuteTransaction()
             .setContractId(contractId)
             .setGas(1000000)
@@ -107,7 +107,7 @@ async function main() {
 
     let cf = "getCurrentStat";
     let res = await readContract(cf);
-    console.log(`- Response for ${cf} : ${res}\n`);
+    console.log(`- Response for ${cf} : ${res}`);
 
     /*let timeout = 2000;
     console.log(`Start waiting for ${timeout} msec...`);
