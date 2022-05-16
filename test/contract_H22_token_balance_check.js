@@ -57,7 +57,7 @@ async function main() {
 
     for (let i=0; i < accounts.length; i++) {
         let res = await bCheckerFcn(AccountId.fromString(accounts[i]), tokenId.toString());
-        console.log(`- Account ${receiverId} balance for token ${tokenId} is: ${res/10e9}`);
+        console.log(`- Account ${accounts[i]} balance for token ${tokenId} is: ${res/1e9}`);
         if (res === undefined) await tokenAssociation(receiverId, tokenId, receiverKey);
     }
 
